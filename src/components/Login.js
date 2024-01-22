@@ -14,6 +14,16 @@ const Login = () => {
     const message = isValid(email.current.value, password.current.value);
 
     setIsValidMessage(message);
+
+    if (message) return;
+
+    // Sign In Sign Up logic
+
+    if (!isSignedUp) {
+      // Sign In Logic
+    } else {
+      // Sign Up Logic
+    }
   };
 
   const toggleForm = () => {
