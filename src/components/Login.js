@@ -1,10 +1,15 @@
 import React from "react";
 import Header from "./Header";
 import isValid from "../utils/validate";
+import { auth } from "../utils/firebase";
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
 
 const Login = () => {
   const [isSignedUp, setIsSignedUp] = React.useState(true);
-  const [isValidMessage, setIsValidMessage] = React.useState(null);
+  const [errorMessage, setErrorMessage] = React.useState(null);
 
   const email = React.useRef(null);
   const password = React.useRef(null);
@@ -13,16 +18,47 @@ const Login = () => {
     e.preventDefault();
     const message = isValid(email.current.value, password.current.value);
 
-    setIsValidMessage(message);
+    setErrorMessage(message);
 
     if (message) return;
 
     // Sign In Sign Up logic
 
     if (!isSignedUp) {
-      // Sign In Logic
-    } else {
       // Sign Up Logic
+
+      createUserWithEmailAndPassword(
+        auth,
+        email.current.value,
+        password.current.value
+      )
+        .then((userCredential) => {
+          // Signed up
+          const user = userCredential.user;
+          console.log(user);
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          setErrorMessage(errorCode + " - " + errorMessage);
+        });
+    } else {
+      // Sign In Logic
+      signInWithEmailAndPassword(
+        auth,
+        email.current.value,
+        password.current.value
+      )
+        .then((userCredential) => {
+          // Signed in
+          const user = userCredential.user;
+          console.log(user);
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          setErrorMessage(errorCode + " - " + errorMessage);
+        });
     }
   };
 
@@ -67,7 +103,7 @@ const Login = () => {
           ref={password}
         />
 
-        <p className="text-red-500 font-bold text-lg py-2">{isValidMessage}</p>
+        <p className="text-red-500 font-bold text-lg py-2">{errorMessage}</p>
 
         <button className="py-2 my-6 rounded-sm bg-[#ff3939] w-[100%]">
           {isSignedUp ? "Sign In" : "Sign Up"}
