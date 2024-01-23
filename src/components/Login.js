@@ -7,10 +7,17 @@ import {
   signInWithEmailAndPassword,
 } from "firebase/auth";
 
+import { useNavigate } from "react-router-dom";
+
+import { updateProfile } from "firebase/auth";
+
 const Login = () => {
   const [isSignedUp, setIsSignedUp] = React.useState(true);
   const [errorMessage, setErrorMessage] = React.useState(null);
 
+  const navigate = useNavigate();
+
+  const name = React.useRef(null);
   const email = React.useRef(null);
   const password = React.useRef(null);
 
@@ -36,6 +43,18 @@ const Login = () => {
           // Signed up
           const user = userCredential.user;
           console.log(user);
+          updateProfile(user, {
+            displayName: name.current.value,
+            photoURL: "SOME_IMG",
+          })
+            .then(() => {
+              // Profile updated!
+              navigate("/browse");
+            })
+            .catch((error) => {
+              // An error occurred
+              setErrorMessage(error.message);
+            });
         })
         .catch((error) => {
           const errorCode = error.code;
@@ -53,6 +72,7 @@ const Login = () => {
           // Signed in
           const user = userCredential.user;
           console.log(user);
+          navigate("/browse");
         })
         .catch((error) => {
           const errorCode = error.code;
@@ -88,6 +108,7 @@ const Login = () => {
             placeholder="Name"
             type="text"
             className="p-4 my-4 w-full bg-gray-700"
+            ref={name}
           />
         )}
         <input
