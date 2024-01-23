@@ -3,9 +3,12 @@ import React from "react";
 import { signOut } from "firebase/auth";
 import { auth } from "../utils/firebase";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const Header = () => {
   const navigate = useNavigate();
+
+  const user = useSelector((store) => store.user);
   const handleSignout = () => {
     signOut(auth)
       .then(() => {
@@ -27,14 +30,16 @@ const Header = () => {
           className="w-44"
         />
       </div>
-      <div className="flex p-4 gap-1">
-        <img
-          className="w-12 h-12"
-          alt="user icon"
-          src="https://upload.wikimedia.org/wikipedia/commons/0/0b/Netflix-avatar.png"
-        />
-        <button onClick={handleSignout}>(Sign Out)</button>
-      </div>
+      {user && (
+        <div className="flex p-4 gap-1">
+          <img
+            className="w-12 h-12"
+            alt="user icon"
+            src="https://upload.wikimedia.org/wikipedia/commons/0/0b/Netflix-avatar.png"
+          />
+          <button onClick={handleSignout}>(Sign Out)</button>
+        </div>
+      )}
     </div>
   );
 };
