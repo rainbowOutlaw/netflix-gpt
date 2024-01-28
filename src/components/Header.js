@@ -53,6 +53,9 @@ const Header = () => {
       </div>
       {user && (
         <div className="flex p-4 gap-1">
+          <button className="bg-green-400 h-10 w-28 mr-2 mt-2 rounded-lg ">
+            GPT Search
+          </button>
           <img className="w-12 h-12" alt="user icon" src={USER_AVATAR} />
           <button className="text-white" onClick={handleSignout}>
             (Sign Out)
