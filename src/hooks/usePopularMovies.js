@@ -5,7 +5,7 @@ import React from "react";
 
 const usePopularMovies = () => {
   const dispatch = useDispatch();
-  const popularMovies = useSelector((store) => store.movie.popularMovies);
+  const popularMovies = useSelector((store) => store.movies.popularMovies);
   const getPopular = async () => {
     try {
       const data = await fetch(
